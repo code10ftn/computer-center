@@ -1,0 +1,55 @@
+﻿<Window x:Class="ComputerCenter.Dialog.GlobalSessionDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ComputerCenter.Dialog"
+        xmlns:command="clr-namespace:ComputerCenter.Command"
+        mc:Ignorable="d"
+        Title="Session Details"
+        WindowStartupLocation="CenterOwner" d:DesignWidth="450" d:DesignHeight="300" MaxWidth="450" MaxHeight="300">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{x:Static command:CloseThisWindowCommand.Instance}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="command:RoutedCommands.OpenContextHelp" CanExecute="OpenContextHelp_CanExecute"
+                        Executed="OpenContextHelp_Executed" />
+    </Window.CommandBindings>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <StackPanel Margin="20, 10, 20, 10">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Subject ID:</Label>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Session.Subject.Id}" />
+                <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold">Subject name:</Label>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Session.Subject.Name}" />
+                <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Classroom ID:</Label>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Session.Classroom.Id}" />
+                <Label Grid.Row="3" Grid.Column="0" FontWeight="Bold">Day:</Label>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Session.Day}" />
+                <Label Grid.Row="4" Grid.Column="0" FontWeight="Bold">Time:</Label>
+                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Session.Time, StringFormat={}{0:HH':'mm}}" />
+                <Label Grid.Row="5" Grid.Column="0" FontWeight="Bold">Terms:</Label>
+                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Session.Terms}" />
+            </Grid>
+            <Button Content="Close" Click="Close" Margin="10" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>

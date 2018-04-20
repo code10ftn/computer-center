@@ -1,0 +1,487 @@
+﻿<Window x:Class="ComputerCenter.Dialog.ContextHelp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ComputerCenter.Dialog"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:command="clr-namespace:ComputerCenter.Command"
+        mc:Ignorable="d"
+        Title="Help" MaxWidth="750" MaxHeight="430">
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{x:Static command:CloseThisWindowCommand.Instance}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+    </Window.InputBindings>
+
+    <Grid Margin="10 10 10 10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TreeView Grid.Column="0"
+                  MinWidth="220"
+                  TreeViewItem.Selected="HelpItem_Selected">
+            <TreeViewItem Header="Application" Name="Application"
+                          IsSelected="{Binding IsApplicationSelected, Mode=OneWay}" />
+            <TreeViewItem Header="Schedule" Name="Schedule" IsExpanded="{Binding IsScheduleExpanded, Mode=OneWay}"
+                          IsSelected="{Binding IsScheduleSelected, Mode=OneWay}">
+                <TreeViewItem Header="Add" Name="ScheduleAdd"
+                              IsSelected="{Binding IsScheduleAddSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Open" Name="ScheduleOpen"
+                              IsSelected="{Binding IsScheduleOpenSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Global View" Name="ScheduleGlobal"
+                              IsSelected="{Binding IsScheduleGlobalSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Session Details" Name="SessionDetails"
+                              IsSelected="{Binding IsSessionDetailsSelected, Mode=OneWay}" />
+            </TreeViewItem>
+            <TreeViewItem Header="Courses" Name="Courses" IsExpanded="{Binding IsCoursesExpanded, Mode=OneWay}">
+                <TreeViewItem Header="View" Name="CoursesView"
+                              IsSelected="{Binding IsCoursesViewSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Add/Edit" Name="CoursesAdd"
+                              IsSelected="{Binding IsCoursesAddSelected, Mode=OneWay}" />
+            </TreeViewItem>
+            <TreeViewItem Header="Software" Name="Softwares" IsExpanded="{Binding IsSoftwareExpanded, Mode=OneWay}">
+                <TreeViewItem Header="View" Name="SoftwaresView"
+                              IsSelected="{Binding IsSoftwareViewSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Add/Edit" Name="SoftwaresAdd"
+                              IsSelected="{Binding IsSoftwareAddSelected, Mode=OneWay}" />
+            </TreeViewItem>
+            <TreeViewItem Header="Subjects" Name="Subjects" IsExpanded="{Binding IsSubjectsExpanded, Mode=OneWay}">
+                <TreeViewItem Header="View" Name="SubjectsView"
+                              IsSelected="{Binding IsSubjectsViewSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Add/Edit" Name="SubjectsAdd"
+                              IsSelected="{Binding IsSubjectsAddSelected, Mode=OneWay}" />
+            </TreeViewItem>
+            <TreeViewItem Header="Classrooms" Name="Classrooms"
+                          IsExpanded="{Binding IsClassroomsExpanded, Mode=OneWay}">
+                <TreeViewItem Header="View" Name="ClassroomsView"
+                              IsSelected="{Binding IsClassroomsViewSelected, Mode=OneWay}" />
+                <TreeViewItem Header="Add/Edit" Name="ClassroomsAdd"
+                              IsSelected="{Binding IsClassroomsAddSelected, Mode=OneWay}" />
+            </TreeViewItem>
+        </TreeView>
+        <ScrollViewer
+            VerticalScrollBarVisibility="Visible"
+            Grid.Column="2">
+            <StackPanel Background="#ffffff">
+                <StackPanel
+                    Visibility="{Binding IsApplicationHelpVisible}">
+                    <TextBlock Text="Computer Center Scheduler" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <StackPanel Margin="0 0 10 0">
+                        <TextBlock
+                            TextWrapping="Wrap"
+                            TextAlignment="Justify"
+                            Text="     Computer Center Scheduler is an application intended for computer center administration. This application allows administrators to create multiple schedules for the computer center. While working on a schedule, all changes are being constantly saved." />
+                        <TextBlock TextWrapping="Wrap"
+                                   TextAlignment="Justify"
+                                   Text="     Administrators can create new schedules and open existing ones, and add sessions to them. They are also able to add courses, subjects, software, and classrooms." />
+                        <TextBlock
+                            Margin="0 10 0 0"
+                            Text="Authors: Helena Zečević, Luka Maletin, Aleksandar Nikolić"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsScheduleHelpVisible}">
+                    <TextBlock Text="Schedule" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Each schedule has a unique name and is represented with a calendar view. After choosing a classroom in the top right corner, all subjects are shown in the list to the right of the calendar. If a subject's requirements aren't met by the chosen classroom (e.g. classroom doesn't have a smartboard, but the subject requires it), subject will be greyed out." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     All the subject that can take place in this classroom can be dragged from the list onto the desired time and day. After dropping the subject, if the subject's minimum required terms fits the chosen time, dialog for choosing number of terms is opened. After choosing the desired number of terms, new session is added to the schedule." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Each session in the schedule can be deleted by selecting the session and pressing the delete button. Double clicking on the session opens the dialog for updating session length." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsScheduleAddHelpVisible}">
+                    <TextBlock Text="Add Schedule" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Adding a new schedule is started by clicking on a New icon in the application toolbar or by pressing Ctrl+N. Since each schedule has a unique name, unique schedule name must be chosen when creating a new schedule. If a name that already exists is chosen, Save button will be disabled." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsScheduleOpenHelpVisible}">
+                    <TextBlock Text="Open Schedule" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Opening a new schedule begins by clicking on an Open icon in the application toolbar or by pressing Ctrl+O. After open schedule dialog opens, a schedule can be chosen from a list box. If no schedule is chosen, Open button will be disabled." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsScheduleGlobalHelpVisible}">
+                    <TextBlock Text="Global Schedule View" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Global schedule can be opened by clicking on Open global schedule icon in the application toolbar or by pressing Ctrl+G. Global view shows all sessions in all classrooms in a week. It is view only." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSessionDetailsHelpVisible}">
+                    <TextBlock Text="Session Details" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Session details dialog is opened after subject from the list is dropped onto the calendar. It show the details of the subject and requires choosing number of terms for this session. If no terms are chosen Save button is disabled." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsCoursesHelpVisible}">
+                    <TextBlock Text="Courses" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Each course contains unique id, name, description, and date when this course was opened. Description is the only optional paramter, and date must be a valid one." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Courses can be accessed by opening side drawer and clicking on courses (or pressing Alt+C) as can be seen on a photo below." />
+                        </StackPanel>
+                        <Image
+                            Grid.Row="2"
+                            Source="pack://application:,,,/ComputerCenter;component/Assets/CoursesHelp.png"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsCoursesViewHelpVisible}">
+                    <TextBlock Text="View Courses" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     After clicking on Courses in a side drawer (or pressing Alt+C), a list of all courses is opened. In this list all course's information can be seen. By clicking on an Add course button a new course can be added." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="      If you wish to see the detailed view of a course or edit the course, you should press the edit button (pencil) next to the course. If you wish to delete the course, you should press the delete button (trashcan) next to the course you wish to delete." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsCoursesAddHelpVisible}">
+                    <TextBlock Text="Add/Edit Course" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Adding a new course begins by clicking on an Add Course button in courses view. Id and name are required fields, and if entered id isn't unique, Save button will be disabled. Date Opened has to be a valid date." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Editing a course begins by clicking on an edit button (pencil) in courses view. Id cannot be changed but all the other fields can. Save button will be disabled if name isn't entered." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSoftwareHelpVisible}">
+                    <TextBlock Text="Software" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Each software contains unique id, name, description, platform on which it can be run, its maker, maker's website, year of release, and price. Platform can be Windows, Linux or Any. Out of all this information about software, only id and name are required." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Software can be accessed by opening side drawer and clicking on Software (or pressing Alt+S) as can be seen on a photo below." />
+                        </StackPanel>
+                        <Image
+                            Grid.Row="2"
+                            Source="pack://application:,,,/ComputerCenter;component/Assets/SoftwareHelp.png"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSoftwareViewHelpVisible}">
+                    <TextBlock Text="View Software" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     After clicking on Software in a side drawer (or pressing Alt+S), a list of all available software is opened. In this list out of all information about software, only id, name, maker and year of release can be seen. By clicking on an Add software button a new software can be added." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="      If you wish to see the detailed view of a software or edit the software, you should press the edit button (pencil) next to the software. If you wish to delete the software, you should press the delete button (trashcan) next to the software you wish to delete." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSoftwareAddHelpVisible}">
+                    <TextBlock Text="Add/Edit Software" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Adding a new software begins by clicking on an Add software button in softwares view. Id and name are required fields, and if entered id isn't unique, Save button will be disabled." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Editing a software begins by clicking on an edit button (pencil) in softwares view. Id cannot be changed but all the other fields can. Save button will be disabled if name isn't entered." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSubjectHelpVisible}">
+                    <TextBlock Text="Subjects" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Each subject contains unique id, name, description, platform and software it requires, group size, number of terms, and minimum term size, and whether it requires a blackboard, smartboard and projector. Required platform for subject is either Windows, Linux, or Both. Out of all this information only id, name and course are required." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Subjects can be accessed by opening side drawer and clicking on Subjects (or pressing Alt+U) as can be seen on a photo below." />
+                        </StackPanel>
+                        <Image
+                            Grid.Row="2"
+                            Source="pack://application:,,,/ComputerCenter;component/Assets/SubjectsHelp.png"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSubjectViewHelpVisible}">
+                    <TextBlock Text="View Subjects" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     After clicking on Subjects in a side drawer (or pressing Alt+U), a list of all available subjects is opened. In this list, all information about subjects besides description can be seen. By clicking on an Add subject button a new subject can be added." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="      If you wish to see the detailed view of a subject or edit the subject, you should press the edit button (pencil) next to the subject. If you wish to delete the subject, you should press the delete button (trashcan) next to the subject you wish to delete." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsSubjectAddHelpVisible}">
+                    <TextBlock Text="Add/Edit Subject" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Adding a new subject begins by clicking on an Add subject button in subjects view. Id, name and course are required fields, and if entered id isn't unique, Save button will be disabled. All the software that this subject requires should be checked." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Editing a subject begins by clicking on an edit button (pencil) in subjects view. Id cannot be changed, but all the other fields can. If name isn't entered, Save button will be disabled." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsClassroomHelpVisible}">
+                    <TextBlock Text="Classrooms" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Each classroom contains unique id, description, platform, number of seats, list of installed software, and whether it has a blackboard, smartboard and projector. Platform in a classroom can be Windows, Linux, or Both. Out of all this information only id is required." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Classrooms can be accessed by opening side drawer and clicking on Classrooms (or pressing Alt+L) as can be seen on a photo below." />
+                        </StackPanel>
+                        <Image
+                            Grid.Row="2"
+                            Source="pack://application:,,,/ComputerCenter;component/Assets/ClassroomHelp.png"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsClassroomViewHelpVisible}">
+                    <TextBlock Text="View Classrooms" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     After clicking on Classrooms in a side drawer (or pressing Alt+L), a list of all classrooms is opened. In this list, all information about classrooms besides description can be seen. By clicking on an Add classroom button a new classroom can be added." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="      If you wish to see the detailed view of a classroom or edit the classroom, you should press the edit button (pencil) next to the classroom. If you wish to delete the classroom, you should press the delete button (trashcan) next to the classroom you wish to delete." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Visibility="{Binding IsClassroomAddHelpVisible}">
+                    <TextBlock Text="Add/Edit Classroom" FontSize="20" HorizontalAlignment="Center" />
+                    <Separator Margin="0 10 0 10" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0 0 10 0">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Adding a new classroom begins by clicking on an Add classroom button in classrooms view. Id is the only required field, and if entered id isn't unique, Save button will be disabled." />
+                            <TextBlock />
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                TextAlignment="Justify"
+                                Text="     Editing a classroom begins by clicking on an edit button (pencil) in classrooms view. Id cannot be changed, but all the other fields can." />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

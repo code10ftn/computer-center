@@ -1,0 +1,86 @@
+﻿<Window x:Class="ComputerCenter.Dialog.SoftwareList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:command="clr-namespace:ComputerCenter.Command"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Software List" MaxWidth="750" MaxHeight="430">
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{x:Static command:CloseThisWindowCommand.Instance}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="command:RoutedCommands.OpenContextHelp" CanExecute="OpenContextHelp_CanExecute"
+                        Executed="OpenContextHelp_Executed" />
+    </Window.CommandBindings>
+
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+        PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+        <StackPanel>
+            <Grid HorizontalAlignment="Stretch" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="260" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Margin="0,0,10,0" materialDesign:HintAssist.Hint="Search"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                         Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}"
+                         TextChanged="FilterList" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Label Margin="0,15,0,0">Platform:</Label>
+                    <ComboBox Margin="0,10,0,0" HorizontalContentAlignment="Center" Width="200"
+                              SelectedValue="{Binding Platform}"
+                              SelectedValuePath="Content" SelectedIndex="0"
+                              SelectionChanged="FilterList">
+                        <ComboBoxItem>Select</ComboBoxItem>
+                        <ComboBoxItem>Windows</ComboBoxItem>
+                        <ComboBoxItem>Linux</ComboBoxItem>
+                        <ComboBoxItem>Both</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+            <DataGrid Name="DataGrid"
+                      ItemsSource="{Binding SoftwareList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" MinWidth="50"
+                                        MaxWidth="100" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="60"
+                                        MaxWidth="200" />
+                    <DataGridTextColumn Header="Maker" Binding="{Binding Maker}" IsReadOnly="True" MinWidth="60"
+                                        MaxWidth="200" />
+                    <DataGridTextColumn Header="Year&#x0a;released" Binding="{Binding YearReleased}" IsReadOnly="True"
+                                        MinWidth="80"
+                                        MaxWidth="80" />
+                    <DataGridTemplateColumn MinWidth="70" MaxWidth="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="Update" Tag="{Binding Id}"
+                                        Style="{DynamicResource MaterialDesignFlatButton}">
+                                    <materialDesign:PackIcon Kind="Pencil" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="70" MaxWidth="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="Remove" Tag="{Binding Id}"
+                                        Style="{DynamicResource MaterialDesignFlatButton}">
+                                    <materialDesign:PackIcon Kind="Delete" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button Content="Add software" Click="Add" Margin="10" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>

@@ -1,0 +1,119 @@
+﻿<Window x:Class="ComputerCenter.Dialog.SubjectDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:command="clr-namespace:ComputerCenter.Command"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:converter="clr-namespace:ComputerCenter.Converter"
+        mc:Ignorable="d"
+        Title="Subject Details" MaxWidth="750" MaxHeight="430"
+        FocusManager.FocusedElement="{Binding ElementName=FocusTextBox}">
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{x:Static command:CloseThisWindowCommand.Instance}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="command:RoutedCommands.OpenContextHelp" CanExecute="OpenContextHelp_CanExecute"
+                        Executed="OpenContextHelp_Executed" />
+    </Window.CommandBindings>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <StackPanel Margin="20, 10, 20, 10">
+            <StackPanel.Resources>
+                <converter:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            </StackPanel.Resources>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Width="Auto"
+                         materialDesign:HintAssist.Hint="ID*" Margin="0, 10, 5, 0" Name="FocusTextBox"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                         IsEnabled="{Binding EditIdEnabled}" MaxLength="20" />
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="Auto"
+                         materialDesign:HintAssist.Hint="Name*" Margin="5, 10, 0, 0"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}" MaxLength="50" />
+            </Grid>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Description" Margin="0, 10, 0, 0"
+                     Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True"
+                     Height="80" MaxHeight="80" MaxLength="250" MaxWidth="694" />
+            <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 0">
+                <Label>Requirements:</Label>
+                <Label Margin="15, 0, 0, 0">Projector</Label>
+                <ToggleButton Margin="5, 0, 0, 0" IsChecked="{Binding RequiresProjector}" />
+                <Label Margin="15, 0, 0, 0">Blackboard</Label>
+                <ToggleButton Margin="5, 0, 0, 0" IsChecked="{Binding RequiresBlackboard}" />
+                <Label Margin="15, 0, 0, 0">Smartboard</Label>
+                <ToggleButton Margin="5, 0, 0, 0" IsChecked="{Binding RequiresSmartboard}" />
+                <Label Margin="15,3,5,0">Course*:</Label>
+                <ComboBox Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="Id"
+                          ToolTip="{Binding Course.Name}" Name="CourseComboBox"
+                          ItemsSource="{Binding Courses, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding Course}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0, 15, 0, 0">
+                <Label>Platform:</Label>
+                <RadioButton Margin="20, 5, 0, 0"
+                             IsChecked="{Binding Path=RequiredPlatform, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Windows}">
+                    Windows
+                </RadioButton>
+                <RadioButton Margin="20, 5, 0, 0"
+                             IsChecked="{Binding Path=RequiredPlatform, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Linux}">
+                    Linux
+                </RadioButton>
+                <RadioButton Margin="20, 5, 0, 0"
+                             IsChecked="{Binding Path=RequiredPlatform, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Any}">
+                    Any
+                </RadioButton>
+                <Label Margin="20, 0, 0, 0" Content="Group&#10;size" />
+                <xctk:IntegerUpDown Value="{Binding GroupSize, UpdateSourceTrigger=PropertyChanged}"
+                                    BorderThickness="0" Increment="1" Minimum="0" />
+                <Label Margin="20, 0, 0, 0" Content="Minimum terms&#10;per session" />
+                <xctk:IntegerUpDown Value="{Binding MinimumTermsPerSession, UpdateSourceTrigger=PropertyChanged}"
+                                    BorderThickness="0" Increment="1" Minimum="1" Name="MinimumTerms" />
+                <Label Margin="20, 0, 0, 0" Content="Required&#10;terms" />
+                <xctk:IntegerUpDown Value="{Binding RequiredTerms, UpdateSourceTrigger=PropertyChanged}"
+                                    BorderThickness="0" Increment="1"
+                                    Minimum="{Binding ElementName=MinimumTerms, Path=Value}" />
+            </StackPanel>
+            <Label>Required software:</Label>
+            <ListBox ItemsSource="{Binding SoftwareList}"
+                     SelectionMode="Multiple" Background="{x:Null}"
+                     MaxWidth="694">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Software.Name}" Margin="3"
+                                  IsChecked="{Binding IsChecked}" Tag="{Binding Software.Id}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListBox>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Margin="0, 10, 5, 0" Grid.Column="0" Content="Save" Width="Auto" Click="Save" Height="25"
+                        IsEnabled="{Binding SaveEnabled}" IsDefault="True" />
+                <Button Margin="5, 10, 0, 0" Grid.Column="1" Content="Cancel" Width="Auto" Click="Cancel" Height="25" />
+            </Grid>
+            <Label Foreground="Red" Content="ID taken, choose a different one."
+                   Visibility="{Binding IdExistsMessageVisible}" />
+            <Label Foreground="Red" Content="Fields marked with * are required."
+                   Visibility="{Binding AllFieldsRequiredVisible}" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>

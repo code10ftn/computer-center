@@ -1,0 +1,102 @@
+﻿<Window x:Class="ComputerCenter.Dialog.SoftwareDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:command="clr-namespace:ComputerCenter.Command"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converter="clr-namespace:ComputerCenter.Converter"
+        mc:Ignorable="d"
+        Title="Software Details" MaxWidth="750" MaxHeight="430"
+        FocusManager.FocusedElement="{Binding ElementName=FocusTextBox}">
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{x:Static command:CloseThisWindowCommand.Instance}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="command:RoutedCommands.OpenContextHelp" CanExecute="OpenContextHelp_CanExecute"
+                        Executed="OpenContextHelp_Executed" />
+    </Window.CommandBindings>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <StackPanel Margin="20, 10, 20, 10">
+            <StackPanel.Resources>
+                <converter:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            </StackPanel.Resources>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Width="Auto"
+                         materialDesign:HintAssist.Hint="ID*" Margin="0, 10, 5, 0" Name="FocusTextBox"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                         IsEnabled="{Binding EditIdEnabled}" MaxLength="20" />
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="Auto"
+                         materialDesign:HintAssist.Hint="Name*" Margin="5, 10, 0, 0"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}" MaxLength="50" />
+            </Grid>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding Maker, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Width="Auto"
+                         materialDesign:HintAssist.Hint="Maker" Margin="0, 10, 5, 0"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                         MaxLength="50" />
+                <TextBox Text="{Binding MakerWebsite, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
+                         Width="Auto"
+                         materialDesign:HintAssist.Hint="Website" Margin="5, 10, 0, 0"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}" MaxLength="50" />
+            </Grid>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Description" Margin="0, 10, 0, 0"
+                     Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True"
+                     Height="80" MaxHeight="80" MaxLength="250" MaxWidth="694" />
+            <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 0">
+                <Label Margin="0, 5, 0, 0">Platform:</Label>
+                <RadioButton Margin="20, 10, 0, 0"
+                             IsChecked="{Binding Path=Platform, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Windows}">
+                    Windows
+                </RadioButton>
+                <RadioButton Margin="20, 10, 0, 0"
+                             IsChecked="{Binding Path=Platform, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Linux}">
+                    Linux
+                </RadioButton>
+                <RadioButton Margin="20, 10, 0, 0"
+                             IsChecked="{Binding Path=Platform, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Both}">
+                    Both
+                </RadioButton>
+                <TextBox Text="{Binding YearReleased, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Year released" Margin="50, 0, 0, 0" Width="150"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                         PreviewTextInput="YearReleased_PreviewTextInput" MaxLength="4"
+                         DataObject.Pasting="TextBoxPasting" />
+                <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, StringFormat=C}"
+                         materialDesign:HintAssist.Hint="Price" Margin="50, 0, 0, 0" Width="150"
+                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                         PreviewTextInput="Price_PreviewTextInput" LostFocus="Price_LostFocus"
+                         DataObject.Pasting="TextBoxPasting" />
+            </StackPanel>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Margin="0, 10, 5, 0" Grid.Column="0" Content="Save" Width="Auto" Click="Save" Height="25"
+                        IsEnabled="{Binding SaveEnabled}" IsDefault="True" />
+                <Button Margin="5, 10, 0, 0" Grid.Column="1" Content="Cancel" Width="Auto" Click="Cancel" Height="25" />
+            </Grid>
+            <Label Foreground="Red" Content="ID taken, choose a different one."
+                   Visibility="{Binding IdExistsMessageVisible}" />
+            <Label Foreground="Red" Content="Fields marked with * are required."
+                   Visibility="{Binding AllFieldsRequiredVisible}" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>

@@ -1,0 +1,286 @@
+﻿<Window x:Class="ComputerCenter.MainWindow"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cmd="clr-namespace:ComputerCenter.Command"
+        xmlns:converter="clr-namespace:ComputerCenter.Converter"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        mc:Ignorable="d"
+        d:DesignWidth="750" d:DesignHeight="430"
+        Title="Computer Center Scheduler" MaxWidth="750" MaxHeight="430" PreviewKeyDown="Window_PreviewKeyDown">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:RoutedCommands.NewSchedule" CanExecute="NewSchedule_CanExecute"
+                        Executed="NewSchedule_Executed" />
+        <CommandBinding Command="cmd:RoutedCommands.OpenSchedule" CanExecute="OpenSchedule_CanExecute"
+                        Executed="OpenSchedule_Executed" />
+        <CommandBinding Command="cmd:RoutedCommands.ToggleMenu" CanExecute="ToggleMenu_CanExecute"
+                        Executed="ToggleMenu_Executed" />
+        <CommandBinding Command="cmd:RoutedCommands.OpenContextHelp" CanExecute="OpenContextHelp_CanExecute"
+                        Executed="OpenContextHelp_Executed" />
+        <CommandBinding Command="cmd:RoutedCommands.ShowGlobalSchedule" CanExecute="ShowGlobalSchedule_CanExecute"
+                        Executed="ShowGlobalSchedule_Executed" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="ApplicationCommands.NotACommand"
+                    Gesture="Delete" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <Style TargetType="syncfusion:HeaderTitleBarView">
+            <Setter Property="Foreground" Value="#373837" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="syncfusion:HeaderTitleBarView" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="syncfusion:ScheduleDaysHeaderViewControl">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="syncfusion:ScheduleDaysHeaderViewControl">
+                        <Grid>
+                            <Border x:Name="border" BorderThickness="1,0,0,0"
+                                    Background="{TemplateBinding HeaderBrush}"
+                                    BorderBrush="{TemplateBinding DayViewVerticalLineStroke}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.5*" MaxHeight="30" />
+                                    </Grid.RowDefinitions>
+
+                                    <Rectangle x:Name="PART_CurrentRectangle"
+                                               Grid.Row="0"
+                                               VerticalAlignment="Top"
+                                               Visibility="Collapsed" />
+
+                                    <Border VerticalAlignment="Center">
+                                        <syncfusion:CustomTextBlock HorizontalAlignment="Left" Margin="15,5,0,5"
+                                                                    Foreground="{Binding TextForeground, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    x:Name="DaysTextBlock"
+                                                                    VerticalAlignment="Center"
+                                                                    DateTimeValue="{Binding DayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    DateTimeFormat="dddd"
+                                                                    FontSize="{TemplateBinding FontSize}"
+                                                                    FontStyle="Normal" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <materialDesign:DrawerHost
+            Name="DrawerHost"
+            BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                                CommandParameter="{x:Static Dock.Left}"
+                                Margin="4" HorizontalAlignment="Left"
+                                Style="{DynamicResource MaterialDesignFlatButton}" ToolTip="Hide menu">
+                            <materialDesign:PackIcon Kind="Menu" />
+                        </Button>
+                        <AccessText VerticalAlignment="Center">Computer Center</AccessText>
+                    </StackPanel>
+                    <StackPanel Margin="8,4,8,8" Name="MenuContainer">
+                        <Separator Background="{DynamicResource MaterialDesignDarkSeparatorBackground}" />
+                        <Button Margin="4" HorizontalAlignment="Center"
+                                Width="{Binding ElementName=MenuContainer,Path=ActualWidth}"
+                                MaxWidth="150"
+                                Click="OpenCourseList"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Alt+C">
+                            _COURSES
+                        </Button>
+                        <Button Margin="4" HorizontalAlignment="Center"
+                                Width="{Binding ElementName=MenuContainer,Path=ActualWidth}"
+                                MaxWidth="150"
+                                Click="OpenSoftwareList"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Alt+S">
+                            _SOFTWARE
+                        </Button>
+                        <Button Margin="4" HorizontalAlignment="Center"
+                                Width="{Binding ElementName=MenuContainer,Path=ActualWidth}"
+                                MaxWidth="150"
+                                Click="OpenSubjectList"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Alt+U">
+                            S_UBJECTS
+                        </Button>
+                        <Button Margin="4" HorizontalAlignment="Center"
+                                Width="{Binding ElementName=MenuContainer,Path=ActualWidth}"
+                                MaxWidth="150"
+                                Click="OpenClassroomList"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Alt+L">
+                            C_LASSROOMS
+                        </Button>
+                        <Separator Background="{DynamicResource MaterialDesignDarkSeparatorBackground}" />
+                        <Button Margin="4" HorizontalAlignment="Center"
+                                Width="{Binding ElementName=MenuContainer,Path=ActualWidth}"
+                                MaxWidth="150"
+                                Click="StartDemo"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Alt+D">
+                            _DEMO
+                        </Button>
+                        <Button Margin="4" HorizontalAlignment="Center"
+                                Width="{Binding ElementName=MenuContainer,Path=ActualWidth}"
+                                MaxWidth="150"
+                                Click="OpenHelp"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Alt+H">
+                            _HELP
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+
+            <Grid>
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top">
+                        <Button Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                                CommandParameter="{x:Static Dock.Left}"
+                                Margin="4" Style="{DynamicResource MaterialDesignFlatButton}" ToolTip="Show menu">
+                            <materialDesign:PackIcon Kind="Menu" />
+                        </Button>
+                        <Button Margin="4"
+                                Command="cmd:RoutedCommands.NewSchedule"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="New (Ctrl+N)">
+                            <materialDesign:PackIcon Kind="NotePlus" />
+                        </Button>
+                        <Button Margin="4"
+                                Command="cmd:RoutedCommands.OpenSchedule"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Open (Ctrl+O)">
+                            <materialDesign:PackIcon Kind="Folder" />
+                        </Button>
+                        <Button x:Name="GlobalButton" Margin="4"
+                                Command="cmd:RoutedCommands.ShowGlobalSchedule"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                ToolTip="Global View (Ctrl+G)">
+                            <materialDesign:PackIcon Kind="Calendar" />
+                        </Button>
+                        <StackPanel x:Name="ClassromsPanel" HorizontalAlignment="Right" Orientation="Horizontal"
+                                    Margin="4">
+                            <Label Margin="0,3,5,0" Foreground="{DynamicResource PrimaryHueMidBrush}">Classroom:</Label>
+                            <ComboBox Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="Id"
+                                      ItemsSource="{Binding Classrooms, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding Classroom}" />
+                        </StackPanel>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Bottom">
+                        <Grid>
+                            <Grid x:Name="ScheduleView">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <syncfusion:SfSchedule AllowEditing="False"
+                                                       CurrentDateBackground="White"
+                                                       CurrentDateForeground="DimGray"
+                                                       Grid.Column="0" Grid.Row="0" x:Name="Schedule"
+                                                       ScheduleType="Workweek"
+                                                       TimeInterval="FifteenMin"
+                                                       WorkStartHour="7" WorkEndHour="22"
+                                                       ShowNonWorkingHours="False"
+                                                       TimeMode="TwentyFourHours" ShowAllDay="False"
+                                                       FirstDayOfWeek="Monday"
+                                                       NonWorkingDays="sunday"
+                                                       AllowDrop="True" DragEnter="Schedule_DragEnter"
+                                                       Drop="Schedule_Drop"
+                                                       AppointmentEditorOpening="Schedule_AppointmentEditorOpening"
+                                                       ContextMenuOpening="Schedule_ContextMenuOpening"
+                                                       AppointmentEndDragging="Schedule_AppointmentEndDragging"
+                                                       AppointmentStartResizing="Schedule_AppointmentStartResizing"
+                                                       AppointmentEndResizing="Schedule_AppointmentEndResizing"
+                                                       AppointmentDragging="Schedule_AppointmentDragging">
+                                    <syncfusion:SfSchedule.AppointmentTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Rectangle Fill="{DynamicResource PrimaryHueMidBrush}"
+                                                           VerticalAlignment="Stretch"
+                                                           HorizontalAlignment="Stretch" />
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Subject}"
+                                                               HorizontalAlignment="Left"
+                                                               FontSize="15" Foreground="White" FontWeight="Normal" />
+                                                    <WrapPanel>
+                                                        <TextBlock Foreground="White" Text="Terms: "
+                                                                   FontWeight="Normal" />
+                                                        <TextBlock Foreground="White"
+                                                                   Text="{Binding Session.Terms}"
+                                                                   FontWeight="Normal" />
+                                                    </WrapPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </syncfusion:SfSchedule.AppointmentTemplate>
+                                </syncfusion:SfSchedule>
+                                <Grid Grid.Column="1" Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" Margin="5,0,0,0"
+                                           Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                        Subjects:
+                                    </Label>
+                                    <ListView Grid.Row="1" SelectionMode="Single" Width="160"
+                                              ItemsSource="{Binding RemainingSessions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              PreviewMouseLeftButtonDown="ListView_PreviewMouseLeftButtonDown"
+                                              MouseMove="ListView_MouseMove">
+                                        <ListView.Resources>
+                                            <converter:VisibilityConverter x:Key="visibilityConverter" />
+                                        </ListView.Resources>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <WrapPanel>
+                                                        <TextBlock Text="Subject: " />
+                                                        <TextBlock Text="{Binding Subject.Name}" FontWeight="Bold" />
+                                                    </WrapPanel>
+                                                    <WrapPanel>
+                                                        <TextBlock Text="Terms: " />
+                                                        <TextBlock Text="{Binding RemainingTerms}"
+                                                                   FontWeight="Bold" />
+                                                        <TextBlock Text=" of " />
+                                                        <TextBlock Text="{Binding Subject.RequiredTerms}"
+                                                                   FontWeight="Bold" />
+                                                    </WrapPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ListViewItem}">
+                                                <Setter Property="IsEnabled"
+                                                        Value="{Binding Enabled}" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                    </ListView>
+                                </Grid>
+                            </Grid>
+                            <Label x:Name="ScheduleLabel" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Content="Create a new schedule (Ctrl+N)&#10;&#10;Open an existing schedule (Ctrl+O)" />
+                        </Grid>
+                    </DockPanel>
+                </DockPanel>
+            </Grid>
+        </materialDesign:DrawerHost>
+    </Grid>
+</Window>
